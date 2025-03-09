@@ -1,219 +1,220 @@
-# Comprehensive Complaint Redressal System
+# Comprehensive Complaint Redressal System - Backend
 
-A robust backend system for automating grievance logging, ensuring transparency, and providing real-time tracking of complaints.
+A state-level student project developed for SSIP Gujarat Hackathon. This backend system provides a complete solution for complaint registration, tracking, escalation, and resolution.
 
 ## Features
 
-- **Multi-Channel Complaint Registration**
-  - Web Portal
-  - WhatsApp Bot
-  - QR Code (Pre-filled Form)
-  - Helpdesk
-
-- **Real-time Notifications**
-  - SMS alerts via Twilio
-  - WhatsApp messages
-  - Email notifications
-  - In-app notifications
-
-- **Automated Escalation**
-  - Configurable escalation thresholds
-  - Multi-level escalation hierarchy
-  - Automatic assignment to higher authorities
-
-- **Complaint Tracking & Reopening**
-  - Real-time status updates
-  - Detailed timeline view
-  - Ability to reopen resolved complaints
-
-- **Role-Based Access**
-  - Citizen: Register, track, and reopen complaints
-  - Officer: View, respond, and resolve assigned complaints
-  - Admin (District Collector): Monitor escalations, analyze trends, and reassign cases
-
-- **Dashboard & Analytics**
-  - Real-time reports on complaint types
-  - Resolution time analysis
-  - Department-wise performance metrics
-  - Python-based data analysis
-
-- **Security & Performance Optimizations**
-  - Rate-limiting
-  - JWT authentication
-  - Input validation
-  - Async task queues
+- **Complaint Registration**: Citizens can file complaints via Web Form or WhatsApp chatbot
+- **Complaint Tracking**: Real-time status updates via SMS/WhatsApp
+- **Auto-Escalation**: Complaints are automatically escalated if unresolved within specified timeframes
+- **Role-Based Access Control**: Different access levels for citizens, officers, and administrators
+- **Analytics Dashboard API**: Generate and visualize complaint statistics
 
 ## Tech Stack
 
 - **Backend**: Node.js + Express.js
-- **Database**: MongoDB (NoSQL)
-- **Authentication**: JWT (Secure role-based access)
-- **Messaging**: Twilio (SMS), WhatsApp API
-- **Task Queue**: BullMQ (Auto-escalation & notifications)
-- **Data Analytics**: Python (pandas, Matplotlib)
-
-## Installation
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- MongoDB
-- Redis (for BullMQ)
-- Python 3.7+ (for analytics)
-
-### Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/complaint-redressal-system.git
-   cd complaint-redressal-system
-   ```
-
-2. Install Node.js dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Install Python dependencies (for analytics):
-   ```bash
-   cd analytics
-   pip install -r requirements.txt
-   cd ..
-   ```
-
-4. Set up environment variables:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-5. Start the server:
-   ```bash
-   npm start
-   ```
-
-## API Endpoints
-
-### Authentication
-
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/me` - Get current user profile
-- `PUT /api/auth/me` - Update user profile
-- `PUT /api/auth/change-password` - Change password
-- `POST /api/auth/forgot-password` - Request password reset
-- `PUT /api/auth/reset-password/:resetToken` - Reset password
-
-### Complaints
-
-- `POST /api/complaints` - Create a new complaint
-- `GET /api/complaints` - Get all complaints (filtered by user role)
-- `GET /api/complaints/:id` - Get complaint by ID
-- `PUT /api/complaints/:id/status` - Update complaint status
-- `PUT /api/complaints/:id/assign` - Assign complaint to officer
-- `PUT /api/complaints/:id/escalate` - Escalate complaint
-- `PUT /api/complaints/:id/reopen` - Reopen complaint
-- `PUT /api/complaints/:id/feedback` - Add feedback to complaint
-- `GET /api/complaints/track/:complaintId` - Track complaint by ID
-- `GET /api/complaints/stats` - Get complaint statistics
-
-### Notifications
-
-- `GET /api/notifications` - Get user notifications
-- `GET /api/notifications/unread-count` - Get unread notification count
-- `GET /api/notifications/:id` - Get notification by ID
-- `PUT /api/notifications/:id/read` - Mark notification as read
-- `PUT /api/notifications/read-all` - Mark all notifications as read
-- `DELETE /api/notifications/:id` - Delete notification
-- `PUT /api/notifications/preferences` - Update notification preferences
-
-### Dashboard
-
-- `GET /api/dashboard/overview` - Get dashboard overview
-- `GET /api/dashboard/trends` - Get complaint trends
-- `GET /api/dashboard/department-performance` - Get department performance
-- `GET /api/dashboard/officer-performance` - Get officer performance
-- `GET /api/dashboard/advanced-analytics` - Get advanced analytics
-- `GET /api/dashboard/category-distribution` - Get category distribution
-
-### Webhooks
-
-- `POST /api/webhooks/whatsapp` - WhatsApp webhook endpoint
+- **Database**: MongoDB
+- **Authentication**: JWT-based role management
+- **Notifications**: Twilio (SMS) + WhatsApp API
+- **Queue Management**: BullMQ (for complaint escalation)
+- **Analytics**: Python script with pandas and Matplotlib
 
 ## Project Structure
 
 ```
-complaint-redressal-system/
-├── analytics/                  # Python analytics scripts
-│   ├── dashboard.py            # Dashboard API
-│   ├── generate_insights.py    # Data analysis script
-│   ├── report_generator.py     # PDF report generator
-│   └── requirements.txt        # Python dependencies
-├── config/                     # Configuration files
-│   ├── bull.js                 # BullMQ configuration
-│   ├── constants.js            # System constants
-│   └── db.js                   # Database configuration
-├── controllers/                # API controllers
-│   ├── authController.js       # Authentication controller
-│   ├── complaintController.js  # Complaint controller
-│   ├── dashboardController.js  # Dashboard controller
-│   ├── notificationController.js # Notification controller
-│   └── whatsappController.js   # WhatsApp integration
-├── middleware/                 # Express middleware
-│   ├── auth.js                 # Authentication middleware
-│   ├── errorHandler.js         # Error handling middleware
-│   ├── rateLimiter.js          # Rate limiting middleware
-│   ├── roleCheck.js            # Role-based access control
-│   └── validator.js            # Input validation
-├── models/                     # MongoDB models
-│   ├── ActivityLog.js          # Activity log model
-│   ├── Complaint.js            # Complaint model
-│   ├── Department.js           # Department model
-│   ├── Notification.js         # Notification model
-│   └── User.js                 # User model
-├── queues/                     # BullMQ queues
-│   ├── escalationQueue.js      # Escalation queue
-│   ├── notificationQueue.js    # Notification queue
-│   └── processors/             # Queue processors
-│       ├── escalationProcessor.js # Escalation processor
-│       └── notificationProcessor.js # Notification processor
-├── routes/                     # API routes
-│   ├── authRoutes.js           # Authentication routes
-│   ├── complaintRoutes.js      # Complaint routes
-│   ├── dashboardRoutes.js      # Dashboard routes
-│   ├── notificationRoutes.js   # Notification routes
-│   └── webhookRoutes.js        # Webhook routes
-├── scripts/                    # Utility scripts
-│   └── run-analytics.js        # Script to run analytics
-├── services/                   # Service layer
-│   ├── emailService.js         # Email service
-│   ├── smsService.js           # SMS service
-│   └── whatsappService.js      # WhatsApp service
-├── utils/                      # Utility functions
-│   ├── generators.js           # ID and token generators
-│   ├── helpers.js              # Helper functions
-│   ├── logger.js               # Logging utility
-│   ├── responseFormatter.js    # API response formatter
-│   └── validationSchemas.js    # Validation schemas
-├── .env.example                # Example environment variables
-├── .gitignore                  # Git ignore file
-├── app.js                      # Express app setup
-├── package.json                # Node.js dependencies
-├── README.md                   # Project documentation
-└── server.js                   # Server entry point
+├── config/             # Configuration files
+├── controllers/        # Request handlers
+├── middlewares/        # Custom middleware functions
+├── models/             # Database models
+├── routes/             # API routes
+├── services/           # Business logic
+├── utils/              # Utility functions
+├── analytics/          # Python scripts for data analysis
+├── .env                # Environment variables
+├── package.json        # Project dependencies
+└── server.js           # Entry point
 ```
 
-## Scheduled Jobs
+## Setup Instructions
 
-- **Escalation Check**: Runs every hour to check for complaints that need escalation
-- **Reminder Notifications**: Runs every 2 hours to send reminders for approaching deadlines
-- **Analytics Generation**: Runs daily to generate fresh insights and reports
+1. **Clone the repository**
+   ```
+   git clone <repository-url>
+   cd complaint-redressal-system
+   ```
 
-## License
+2. **Install dependencies**
+   ```
+   npm install
+   ```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+3. **Configure environment variables**
+   - Copy `.env.example` to `.env`
+   - Update the variables with your credentials
 
-## Acknowledgements
+4. **Start MongoDB**
+   - Make sure MongoDB is running on your system
 
-- SSIP Gujarat for the opportunity to develop this solution
-- All contributors who participated in this project
+5. **Run the server**
+   ```
+   # Development mode
+   npm run dev
+   
+   # Production mode
+   npm start
+   ```
+
+6. **Setup Python analytics (optional)**
+   ```
+   cd analytics
+   pip install -r requirements.txt
+   ```
+
+## API Documentation
+
+### Authentication
+
+#### Register a new user
+- **URL**: `/api/auth/register`
+- **Method**: `POST`
+- **Request Body**:
+  ```json
+  {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "1234567890",
+    "password": "password123",
+    "role": "citizen"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "User registered successfully",
+    "data": {
+      "user": {
+        "_id": "user_id",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "phone": "1234567890",
+        "role": "citizen"
+      },
+      "token": "jwt_token"
+    }
+  }
+  ```
+
+#### Login
+- **URL**: `/api/auth/login`
+- **Method**: `POST`
+- **Request Body**:
+  ```json
+  {
+    "email": "john@example.com",
+    "password": "password123"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Login successful",
+    "data": {
+      "user": {
+        "_id": "user_id",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "phone": "1234567890",
+        "role": "citizen"
+      },
+      "token": "jwt_token"
+    }
+  }
+  ```
+
+#### Change password
+- **URL**: `/api/auth/change-password`
+- **Method**: `PUT`
+- **Headers**: `Authorization: Bearer jwt_token`
+- **Request Body**:
+  ```json
+  {
+    "currentPassword": "password123",
+    "newPassword": "newpassword123"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Password updated successfully"
+  }
+  ```
+
+### Complaints
+
+#### Create a new complaint
+- **URL**: `/api/complaints`
+- **Method**: `POST`
+- **Headers**: `Authorization: Bearer jwt_token`
+- **Request Body**:
+  ```json
+  {
+    "title": "Water supply issue",
+    "description": "No water supply for the last 2 days",
+    "category": "water",
+    "priority": "high",
+    "location": {
+      "address": "123 Main St",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "pincode": "380001"
+    }
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Complaint registered successfully",
+    "data": {
+      "_id": "complaint_id",
+      "title": "Water supply issue",
+      "description": "No water supply for the last 2 days",
+      "category": "water",
+      "priority": "high",
+      "status": "pending",
+      "location": {
+        "address": "123 Main St",
+        "city": "Ahmedabad",
+        "state": "Gujarat",
+        "pincode": "380001"
+      },
+      "citizen": "user_id",
+      "assignedTo": "officer_id",
+      "createdAt": "timestamp"
+    }
+  }
+  ```
+
+#### Fetch complaints
+- **URL**: `/api/complaints`
+- **Method**: `GET`
+- **Headers**: `Authorization: Bearer jwt_token`
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "_id": "complaint_id",
+        "title": "Water supply issue",
+        "status": "pending",
+        "priority": "high",
+        "createdAt": "timestamp"
+      }
+    ]
+  }
+  ```
+
